@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+env/
+venv/
+.env
+
+# Responses (contains participant data — do not commit)
+responses.csv
+
+# Streamlit
+.streamlit/
+
+# Anaconda
+*.conda
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
