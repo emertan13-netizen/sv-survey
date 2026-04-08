@@ -495,7 +495,15 @@ if current_q_index < len(questions):
                 save_response(st.session_state.answers)
                 st.session_state.submitted = True
                 st.rerun()
-
+import os
+if os.path.isfile("responses.csv"):
+    with open("responses.csv", "rb") as f:
+        st.download_button(
+            label="Download responses (admin)",
+            data=f,
+            file_name="responses.csv",
+            mime="text/csv"
+        )
 # ── FOOTER ─────────────────────────────────────────────────
 st.progress(progress)
 st.caption(f"{int(progress * 100)}% complete")
