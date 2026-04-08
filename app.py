@@ -508,6 +508,16 @@ if os.path.isfile("responses.csv"):
 st.progress(progress)
 st.caption(f"{int(progress * 100)}% complete")
 
+import os
+if os.path.isfile("responses.csv"):
+    with open("responses.csv", "rb") as f:
+        st.download_button(
+            label="Download responses (admin)",
+            data=f,
+            file_name="responses.csv",
+            mime="text/csv"
+        )
+
 st.markdown("""
 <div class="footer-note">
 This survey is anonymous. Data will be used solely for an independent research project
