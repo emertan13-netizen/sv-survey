@@ -14,29 +14,15 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-
     .title-block {
         background: transparent;
         border-bottom: 3px solid #028090;
         padding: 1.5rem 0 1rem 0;
         margin-bottom: 1.5rem;
     }
-    .title-block h1 {
-        color: #028090;
-        font-size: 2.2rem;
-        font-weight: 700;
-        margin: 0 0 0.4rem 0;
-    }
-    .title-block p {
-        color: #555555;
-        font-size: 1.1rem;
-        margin: 0 0 0.3rem 0;
-    }
-    .title-block .meta {
-        color: #888888;
-        font-size: 1rem;
-        margin-top: 0.3rem;
-    }
+    .title-block h1 { color: #028090; font-size: 2.2rem; font-weight: 700; margin: 0 0 0.4rem 0; }
+    .title-block p { color: #555555; font-size: 1.1rem; margin: 0 0 0.3rem 0; }
+    .title-block .meta { color: #888888; font-size: 1rem; margin-top: 0.3rem; }
     .hypothesis-box {
         background: #E8F4F7;
         border-left: 5px solid #028090;
@@ -44,35 +30,11 @@ st.markdown("""
         padding: 1rem 1.25rem;
         margin: 1rem 0;
     }
-    .hypothesis-box h4 {
-        color: #028090;
-        margin: 0 0 0.5rem 0;
-        font-size: 0.95rem;
-    }
-    .hypothesis-box p {
-        color: #333;
-        margin: 0.25rem 0;
-        font-size: 0.9rem;
-    }
-    .question-card {
-        background: transparent;
-        padding: 1rem 0;
-        margin: 1rem 0;
-    }
-    .question-text {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #0A1628;
-        margin-bottom: 1.5rem;
-        line-height: 1.5;
-    }
-    .question-note {
-        font-size: 0.88rem;
-        color: #888;
-        font-style: italic;
-        margin-bottom: 1rem;
-        margin-top: -0.75rem;
-    }
+    .hypothesis-box h4 { color: #028090; margin: 0 0 0.5rem 0; font-size: 0.95rem; }
+    .hypothesis-box p { color: #333; margin: 0.25rem 0; font-size: 0.9rem; }
+    .question-card { background: transparent; padding: 1rem 0; margin: 1rem 0; }
+    .question-text { font-size: 1.25rem; font-weight: 600; color: #0A1628; margin-bottom: 1.5rem; line-height: 1.5; }
+    .question-note { font-size: 0.88rem; color: #888; font-style: italic; margin-bottom: 1rem; margin-top: -0.75rem; }
     .success-box {
         background: linear-gradient(135deg, #E8F4F7, #EDFAF3);
         border: 2px solid #2DBFB8;
@@ -102,15 +64,12 @@ st.markdown("""
         width: 100%;
         margin-top: 0.5rem;
     }
-    .stButton > button:hover {
-        background: linear-gradient(135deg, #025F6B, #028090);
-    }
+    .stButton > button:hover { background: linear-gradient(135deg, #025F6B, #028090); }
     div[data-testid="stRadio"] label { font-size: 0.95rem; }
     div[data-testid="stCheckbox"] label { font-size: 0.95rem; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── RESPONSES ──────────────────────────────────────────────
 RESPONSES_FILE = "responses.csv"
 
 def save_response(data):
@@ -122,7 +81,6 @@ def save_response(data):
             writer.writeheader()
         writer.writerow(data)
 
-# ── SESSION STATE ──────────────────────────────────────────
 if "step" not in st.session_state:
     st.session_state.step = 0
 if "answers" not in st.session_state:
@@ -136,7 +94,6 @@ def next_step():
 def prev_step():
     st.session_state.step = max(0, st.session_state.step - 1)
 
-# ── TITLE ──────────────────────────────────────────────────
 st.markdown("""
 <div class="title-block">
     <h1>Clinical Supervision Research Survey</h1>
@@ -145,7 +102,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── SUBMITTED ──────────────────────────────────────────────
 if st.session_state.submitted:
     st.markdown("""
     <div class="success-box">
@@ -156,7 +112,6 @@ if st.session_state.submitted:
     """, unsafe_allow_html=True)
     st.stop()
 
-# ── INTRO ──────────────────────────────────────────────────
 if st.session_state.step == 0:
     st.markdown("""
     Thank you for taking part. Your responses are **anonymous** and will be used solely to inform
@@ -174,7 +129,6 @@ if st.session_state.step == 0:
     st.button("Start Survey", on_click=next_step)
     st.stop()
 
-# ── QUESTION ROUTING ───────────────────────────────────────
 role = st.session_state.answers.get("role", None)
 
 def get_questions(role):
@@ -183,11 +137,8 @@ def get_questions(role):
         qs += ["q3_hours", "q4_capacity", "q5_sup_reflection", "q6_sup_intersession"]
     elif role == "DClinPsy trainee":
         qs += ["q5_tra_reflection", "q6_tra_intersession", "q7_workarounds"]
-    qs += [
-        "q8_existing", "q9_attitude", "q10_usefulness",
-        "q11_workflow", "q12_adoption", "q13_success",
-        "q14_channels", "q15_concerns", "q15b_open"
-    ]
+    qs += ["q8_existing", "q9_attitude", "q10_usefulness", "q11_workflow",
+           "q12_adoption", "q13_success", "q14_channels", "q15_concerns", "q15b_open"]
     return qs
 
 questions = get_questions(role)
@@ -195,35 +146,22 @@ current_q_index = st.session_state.step - 1
 total_qs = len(get_questions("DClinPsy supervisor"))
 progress = min(current_q_index / total_qs, 1.0) if total_qs > 0 else 0
 
-
-# ── QUESTIONS ──────────────────────────────────────────────
 if current_q_index < len(questions):
     q = questions[current_q_index]
 
-    # Q1
     if q == "q1_role":
         st.markdown('<div class="question-card"><div class="question-text">What is your current role?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "DClinPsy supervisor",
-            "DClinPsy trainee"
-        ], key="q1", label_visibility="collapsed")
+        ans = st.radio("", ["DClinPsy supervisor", "DClinPsy trainee"], key="q1", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col2:
             if st.button("Next", key="n1"):
                 st.session_state.answers["role"] = ans
-                next_step()
-                st.rerun()
+                next_step(); st.rerun()
 
-    # Q2
     elif q == "q2_digital":
         st.markdown('<div class="question-card"><div class="question-text">Have you ever used a digital tool to support clinical training or supervision?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Yes, regularly",
-            "Yes, occasionally",
-            "No, but open to it",
-            "No, not interested"
-        ], key="q2", label_visibility="collapsed")
+        ans = st.radio("", ["Yes, regularly", "Yes, occasionally", "No, but open to it", "No, not interested"], key="q2", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b2")
@@ -232,16 +170,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["digital_experience"] = ans
                 next_step(); st.rerun()
 
-    # Q3 — supervisors
     elif q == "q3_hours":
         st.markdown('<div class="question-card"><div class="question-text">Approximately how many hours per week do you spend on direct supervision of trainee clinical sessions?</div><div class="question-note">e.g. sitting in, co-facilitating, observing, post-session debrief</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Less than 1 hour",
-            "1–2 hours",
-            "3–5 hours",
-            "More than 5 hours",
-            "Not applicable"
-        ], key="q3", label_visibility="collapsed")
+        ans = st.radio("", ["Less than 1 hour", "1–2 hours", "3–5 hours", "More than 5 hours", "Not applicable"], key="q3", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b3")
@@ -250,16 +181,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["sup_hours"] = ans
                 next_step(); st.rerun()
 
-    # Q4 — supervisors
     elif q == "q4_capacity":
         st.markdown('<div class="question-card"><div class="question-text">Has supervision capacity ever been a factor in limiting the number of trainees your service could accommodate?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Yes, definitely",
-            "Yes, to some extent",
-            "Not sure",
-            "No",
-            "Not applicable"
-        ], key="q4", label_visibility="collapsed")
+        ans = st.radio("", ["Yes, definitely", "Yes, to some extent", "Not sure", "No", "Not applicable"], key="q4", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b4")
@@ -268,12 +192,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["sup_capacity"] = ans
                 next_step(); st.rerun()
 
-    # Q5a — supervisors
     elif q == "q5_sup_reflection":
         st.markdown('<div class="question-card"><div class="question-text">How would you describe the quality of post-session reflection currently available to trainees in your service?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Very good", "Good", "Adequate", "Poor", "Very poor", "Not sure"
-        ], key="q5s", label_visibility="collapsed")
+        ans = st.radio("", ["Very good", "Good", "Adequate", "Poor", "Very poor", "Not sure"], key="q5s", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b5s")
@@ -282,12 +203,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["sup_reflection"] = ans
                 next_step(); st.rerun()
 
-    # Q6a — supervisors
     elif q == "q6_sup_intersession":
         st.markdown('<div class="question-card"><div class="question-text">How often do trainees in your service seek guidance or support between formal supervision sessions?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Very often", "Often", "Sometimes", "Rarely", "Never", "Not sure"
-        ], key="q6s", label_visibility="collapsed")
+        ans = st.radio("", ["Very often", "Often", "Sometimes", "Rarely", "Never", "Not sure"], key="q6s", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b6s")
@@ -296,12 +214,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["sup_intersession"] = ans
                 next_step(); st.rerun()
 
-    # Q5b — trainees
     elif q == "q5_tra_reflection":
         st.markdown('<div class="question-card"><div class="question-text">How would you describe the quality of post-session reflection currently available to you in your placement?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Very good", "Good", "Adequate", "Poor", "Very poor", "Not sure"
-        ], key="q5t", label_visibility="collapsed")
+        ans = st.radio("", ["Very good", "Good", "Adequate", "Poor", "Very poor", "Not sure"], key="q5t", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b5t")
@@ -310,12 +225,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["tra_reflection"] = ans
                 next_step(); st.rerun()
 
-    # Q6b — trainees
     elif q == "q6_tra_intersession":
         st.markdown('<div class="question-card"><div class="question-text">How often do you seek clinical guidance or support between your formal supervision sessions?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Very often", "Often", "Sometimes", "Rarely", "Never"
-        ], key="q6t", label_visibility="collapsed")
+        ans = st.radio("", ["Very often", "Often", "Sometimes", "Rarely", "Never"], key="q6t", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b6t")
@@ -324,16 +236,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["tra_intersession"] = ans
                 next_step(); st.rerun()
 
-    # Q7 — trainees
     elif q == "q7_workarounds":
         st.markdown('<div class="question-card"><div class="question-text">How do you currently reflect on sessions between supervision meetings?</div><div class="question-note">Select all that apply</div>', unsafe_allow_html=True)
-        opts = [
-            "Written notes or reflective journal",
-            "Informal discussion with colleagues",
-            "Self-directed reading",
-            "No structured process",
-            "Other"
-        ]
+        opts = ["Written notes or reflective journal", "Informal discussion with colleagues", "Self-directed reading", "No structured process", "Other"]
         selected = [o for o in opts if st.checkbox(o, key=f"q7_{o}")]
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
@@ -343,15 +248,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["tra_workarounds"] = "|".join(selected)
                 next_step(); st.rerun()
 
-    # Q8 — all
     elif q == "q8_existing":
         st.markdown('<div class="question-card"><div class="question-text">Are there any existing tools or processes in your service that help address supervision workload or trainee reflection?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Yes, and they work well",
-            "Yes, but inadequate",
-            "No",
-            "Not sure"
-        ], key="q8", label_visibility="collapsed")
+        ans = st.radio("", ["Yes, and they work well", "Yes, but inadequate", "No", "Not sure"], key="q8", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b8")
@@ -360,12 +259,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["existing_tools"] = ans
                 next_step(); st.rerun()
 
-    # Q9 — all
     elif q == "q9_attitude":
         st.markdown('<div class="question-card"><div class="question-text">How do you currently feel about the use of digital tools in clinical training and supervision?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Very positive", "Positive", "Neutral", "Negative", "Very negative"
-        ], key="q9", label_visibility="collapsed")
+        ans = st.radio("", ["Very positive", "Positive", "Neutral", "Negative", "Very negative"], key="q9", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b9")
@@ -374,12 +270,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["digital_attitude"] = ans
                 next_step(); st.rerun()
 
-    # Q10 — all
     elif q == "q10_usefulness":
         st.markdown('<div class="question-card"><div class="question-text">How useful would an AI tool be that guided trainees through structured reflection after sessions and tracked their competency progress between supervision meetings?</div><div class="question-note">1 = not at all useful, 5 = extremely useful</div>', unsafe_allow_html=True)
-        ans = st.select_slider("", options=[
-            "1 — Not at all useful", "2", "3 — Neutral", "4", "5 — Extremely useful"
-        ], key="q10", label_visibility="collapsed")
+        ans = st.select_slider("", options=["1 — Not at all useful", "2", "3 — Neutral", "4", "5 — Extremely useful"], key="q10", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b10")
@@ -388,12 +281,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["usefulness"] = ans
                 next_step(); st.rerun()
 
-    # Q11 — all
     elif q == "q11_workflow":
         st.markdown('<div class="question-card"><div class="question-text">How easily could a digital reflection tool fit into your current working routine?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Very easily", "Fairly easily", "Neutral", "With some difficulty", "Very difficult"
-        ], key="q11", label_visibility="collapsed")
+        ans = st.radio("", ["Very easily", "Fairly easily", "Neutral", "With some difficulty", "Very difficult"], key="q11", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b11")
@@ -402,12 +292,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["workflow_fit"] = ans
                 next_step(); st.rerun()
 
-    # Q12 — all
     elif q == "q12_adoption":
         st.markdown('<div class="question-card"><div class="question-text">If a tool like this existed, would you use or recommend it?</div>', unsafe_allow_html=True)
-        ans = st.radio("", [
-            "Definitely yes", "Probably yes", "Not sure", "Probably not", "Definitely not"
-        ], key="q12", label_visibility="collapsed")
+        ans = st.radio("", ["Definitely yes", "Probably yes", "Not sure", "Probably not", "Definitely not"], key="q12", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b12")
@@ -416,7 +303,6 @@ if current_q_index < len(questions):
                 st.session_state.answers["adoption"] = ans
                 next_step(); st.rerun()
 
-    # Q13 — all
     elif q == "q13_success":
         st.markdown('<div class="question-card"><div class="question-text">What would make you consider a digital supervision support tool successful in your service?</div><div class="question-note">Select all that apply</div>', unsafe_allow_html=True)
         opts = [
@@ -439,7 +325,6 @@ if current_q_index < len(questions):
                 st.session_state.answers["success_metrics"] = "|".join(selected)
                 next_step(); st.rerun()
 
-    # Q14 — all
     elif q == "q14_channels":
         st.markdown('<div class="question-card"><div class="question-text">How would you most likely hear about and adopt a new digital tool for clinical supervision?</div><div class="question-note">Select all that apply</div>', unsafe_allow_html=True)
         opts = [
@@ -459,7 +344,6 @@ if current_q_index < len(questions):
                 st.session_state.answers["channels"] = "|".join(selected)
                 next_step(); st.rerun()
 
-    # Q15a — all
     elif q == "q15_concerns":
         st.markdown('<div class="question-card"><div class="question-text">What would be your biggest concern about using an AI tool to support clinical supervision?</div><div class="question-note">Select all that apply</div>', unsafe_allow_html=True)
         opts = [
@@ -481,11 +365,9 @@ if current_q_index < len(questions):
                 st.session_state.answers["concerns"] = "|".join(selected)
                 next_step(); st.rerun()
 
-    # Q15b — all
     elif q == "q15b_open":
         st.markdown('<div class="question-card"><div class="question-text">Is there anything else you would like to share about your experience of clinical supervision or training?</div><div class="question-note">Optional</div>', unsafe_allow_html=True)
-        ans = st.text_area("", placeholder="Your response here...", height=150,
-                           key="q15b", label_visibility="collapsed")
+        ans = st.text_area("", placeholder="Your response here...", height=150, key="q15b", label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1: st.button("Back", on_click=prev_step, key="b15b")
@@ -495,22 +377,13 @@ if current_q_index < len(questions):
                 save_response(st.session_state.answers)
                 st.session_state.submitted = True
                 st.rerun()
-import os
-if os.path.isfile("responses.csv"):
-    with open("responses.csv", "rb") as f:
-        st.download_button(
-            label="Download responses (admin)",
-            data=f,
-            file_name="responses.csv",
-            mime="text/csv"
-        )
-# ── FOOTER ─────────────────────────────────────────────────
+
+# ── PROGRESS + DOWNLOAD + FOOTER ───────────────────────────
 st.progress(progress)
 st.caption(f"{int(progress * 100)}% complete")
 
-import os
-if os.path.isfile("responses.csv"):
-    with open("responses.csv", "rb") as f:
+if os.path.isfile(RESPONSES_FILE):
+    with open(RESPONSES_FILE, "rb") as f:
         st.download_button(
             label="Download responses (admin)",
             data=f,
