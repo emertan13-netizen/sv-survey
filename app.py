@@ -390,6 +390,8 @@ if os.path.isfile(RESPONSES_FILE):
             file_name="responses.csv",
             mime="text/csv"
         )
+else:
+    st.caption("No responses collected yet.")
 
 st.markdown("""
 <div class="footer-note">
